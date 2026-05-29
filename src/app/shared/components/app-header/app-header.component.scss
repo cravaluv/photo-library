@@ -1,0 +1,35 @@
+.app-header {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-header__brand {
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-title-small);
+  white-space: nowrap;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: auto;
+}
+
+.app-header__link {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-title-medium);
+  text-decoration: none;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: var(--mat-sys-on-surface);
+  }
+
+  &--active {
+    color: var(--mat-sys-primary);
+    border-bottom-color: var(--mat-sys-primary);
+  }
+}

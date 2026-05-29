@@ -1,0 +1,19 @@
+<mat-toolbar class="app-header">
+    <span class="app-header__brand">Photo library</span>
+    <nav class="app-header__nav" aria-label="Main navigation">
+        <a
+        routerLink="/"
+        class="app-header__link"
+        [class.app-header__link--active]="activeSection() === 'photos'"
+        >
+        Photos
+        </a>
+        <a
+        routerLink="/favorites"
+        class="app-header__link"
+        [class.app-header__link--active]="activeSection() === 'favorites'"
+        >
+        Favorites
+        </a>
+    </nav>
+</mat-toolbar>
