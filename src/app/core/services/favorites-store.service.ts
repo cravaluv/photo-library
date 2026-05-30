@@ -11,21 +11,31 @@ export class FavoritesStore {
 
   readonly favorites = this.favoritesState.asReadonly();
 
-  add(photo: Photo) {
+  add(photo: Photo): boolean {
     if (this.favorites().some((f) => f.id === photo.id)) {
-      return;
+      return true;
     }
 
     const entry: Photo = { ...photo, addedAt: Date.now() };
     const next = [...this.favorites(), entry];
 
-    this.setFavorites(next);
+    if (!this.storage.save(next)) {
+      return false;
+    }
+
+    this.favoritesState.set(next);
+    return true;
   }
 
-  remove(id: string) {
+  remove(id: string): boolean {
     const next = this.favorites().filter((f) => f.id !== id);
 
-    this.setFavorites(next);
+    if (!this.storage.save(next)) {
+      return false;
+    }
+
+    this.favoritesState.set(next);
+    return true;
   }
 
   getById(id: string): Photo | undefined {
@@ -34,10 +44,5 @@ export class FavoritesStore {
 
   private loadInitial(): Photo[] {
     return this.storage.load();
-  }
-
-  private setFavorites(next: Photo[]) {
-    this.favoritesState.set(next);
-    this.storage.save(next);
   }
 }

@@ -28,7 +28,7 @@ describe('PhotoDetailsComponent', () => {
 
   beforeEach(async () => {
     navigate = jasmine.createSpy('navigate').and.returnValue(Promise.resolve(true));
-    remove = jasmine.createSpy('remove');
+    remove = jasmine.createSpy('remove').and.returnValue(true);
     getById = jasmine.createSpy('getById').and.returnValue(photo);
     snackBarOpen = jasmine.createSpy('open');
 

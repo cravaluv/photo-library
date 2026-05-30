@@ -48,4 +48,12 @@ describe('FavoritesStorage', () => {
     localStorage.setItem(FAVORITES_STORAGE_KEY, '{"id":"1"}');
     expect(storage.load()).toEqual([]);
   });
+
+  it('returns false when localStorage setItem fails', () => {
+    spyOn(Storage.prototype, 'setItem').and.throwError(
+      new DOMException('quota', 'QuotaExceededError'),
+    );
+
+    expect(storage.save([photo])).toBeFalse();
+  });
 });

@@ -12,7 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
 import { PICSUM_DETAIL } from '../../core/constants/picsum.constants';
-import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
+import {
+  SNACKBAR_DURATION_MS,
+  SNACKBAR_FAVORITES_REMOVE_ERROR,
+} from '../../core/constants/ui.constants';
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 
@@ -59,7 +62,13 @@ export class PhotoDetailsComponent implements OnInit {
       return;
     }
 
-    this.favoritesStore.remove(current.id);
+    if (!this.favoritesStore.remove(current.id)) {
+      this.snackBar.open(SNACKBAR_FAVORITES_REMOVE_ERROR, undefined, {
+        duration: SNACKBAR_DURATION_MS,
+      });
+      return;
+    }
+
     this.snackBar.open('Photo removed from favorites', undefined, {
       duration: SNACKBAR_DURATION_MS,
     });

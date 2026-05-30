@@ -9,9 +9,13 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs';
+import { catchError, EMPTY, finalize } from 'rxjs';
 
-import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
+import {
+  SNACKBAR_DURATION_MS,
+  SNACKBAR_FAVORITES_SAVE_ERROR,
+  SNACKBAR_LOAD_PHOTOS_ERROR,
+} from '../../core/constants/ui.constants';
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
@@ -59,6 +63,12 @@ export class PhotosComponent implements OnInit {
     this.photoApi
       .fetchPage(nextPage)
       .pipe(
+        catchError(() => {
+          this.snackBar.open(SNACKBAR_LOAD_PHOTOS_ERROR, undefined, {
+            duration: SNACKBAR_DURATION_MS,
+          });
+          return EMPTY;
+        }),
         finalize(() => this.loading.set(false)),
         takeUntilDestroyed(this.destroyRef),
       )
@@ -81,7 +91,13 @@ export class PhotosComponent implements OnInit {
       return;
     }
 
-    this.favoritesStore.add(photo);
+    if (!this.favoritesStore.add(photo)) {
+      this.snackBar.open(SNACKBAR_FAVORITES_SAVE_ERROR, undefined, {
+        duration: SNACKBAR_DURATION_MS,
+      });
+      return;
+    }
+
     this.snackBar.open('Photo added to favorites', undefined, {
       duration: SNACKBAR_DURATION_MS,
     });

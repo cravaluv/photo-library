@@ -1,8 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
-import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
+import {
+  SNACKBAR_DURATION_MS,
+  SNACKBAR_LOAD_PHOTOS_ERROR,
+} from '../../core/constants/ui.constants';
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
@@ -30,7 +33,7 @@ describe('PhotosComponent', () => {
 
   beforeEach(async () => {
     fetchPage = jasmine.createSpy('fetchPage').and.returnValue(of(photos));
-    favoritesAdd = jasmine.createSpy('add');
+    favoritesAdd = jasmine.createSpy('add').and.returnValue(true);
     favoritesGetById = jasmine.createSpy('getById').and.returnValue(undefined);
     snackBarOpen = jasmine.createSpy('open');
 
@@ -108,6 +111,17 @@ describe('PhotosComponent', () => {
 
     expect(component.hasMore()).toBeFalse();
     expect(component.photos()).toEqual(photos);
+  });
+
+  it('shows snackbar when photo fetch fails', () => {
+    fetchPage.and.returnValue(throwError(() => new Error('network')));
+
+    component.loadMore();
+
+    expect(snackBarOpen).toHaveBeenCalledWith(SNACKBAR_LOAD_PHOTOS_ERROR, undefined, {
+      duration: SNACKBAR_DURATION_MS,
+    });
+    expect(component.loading()).toBeFalse();
   });
 
   it('adds photo to favorites on click', () => {

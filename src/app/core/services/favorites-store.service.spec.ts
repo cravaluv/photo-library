@@ -76,10 +76,17 @@ describe('FavoritesStore', () => {
   });
 
   it('uses FavoritesStorage for persistence', () => {
-    const storageSpy = spyOn(TestBed.inject(FavoritesStorage), 'save');
+    const storageSpy = spyOn(TestBed.inject(FavoritesStorage), 'save').and.returnValue(true);
 
     store.add(photo);
 
     expect(storageSpy).toHaveBeenCalled();
+  });
+
+  it('does not update favorites when save fails', () => {
+    spyOn(TestBed.inject(FavoritesStorage), 'save').and.returnValue(false);
+
+    expect(store.add(photo)).toBeFalse();
+    expect(store.favorites()).toEqual([]);
   });
 });

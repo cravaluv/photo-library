@@ -25,7 +25,12 @@ export class FavoritesStorage {
     }
   }
 
-  save(photos: Photo[]) {
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(photos));
+  save(photos: Photo[]): boolean {
+    try {
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(photos));
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
