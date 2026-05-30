@@ -1,5 +1,5 @@
 @if (favorites().length === 0) {
   <p class="favorites__empty">No favorites yet</p>
 } @else {
-  <app-photo-grid [photos]="favorites()" />
+  <app-photo-grid [photos]="favorites()" (photoClick)="onPhotoClick($event)" />
 }

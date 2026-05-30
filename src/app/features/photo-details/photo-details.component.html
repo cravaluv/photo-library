@@ -1,1 +1,18 @@
-<p>photo-details works!</p>
+@if (photo(); as current) {
+  <article class="photo-details">
+    <img
+      class="photo-details__image"
+      [ngSrc]="current.detailUrl"
+      [width]="detailWidth"
+      [height]="detailHeight"
+      [alt]="'Photo by ' + current.author"
+      priority
+    />
+    <footer class="photo-details__actions">
+      <p class="photo-details__author">{{ current.author }}</p>
+      <button mat-flat-button type="button" (click)="remove()">
+        Remove from favorites
+      </button>
+    </footer>
+  </article>
+}

@@ -12,11 +12,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs';
 
 import { Photo } from '../../core/models/photo.types';
+import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
 import { PhotoGridComponent } from '../../shared/components/photo-grid/photo-grid.component';
-
-export const SNACKBAR_DURATION_MS = 3000;
 
 @Component({
   selector: 'app-photos',

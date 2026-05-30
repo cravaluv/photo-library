@@ -1,0 +1,26 @@
+.photo-details {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: calc(100vh - 8rem);
+}
+
+.photo-details__image {
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.photo-details__actions {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.photo-details__author {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-large);
+  margin: 0;
+}

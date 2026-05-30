@@ -1,5 +1,6 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
@@ -10,6 +11,7 @@ describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
   let fixture: ComponentFixture<FavoritesComponent>;
   let favorites: ReturnType<typeof signal<Photo[]>>;
+  let navigate: jasmine.Spy;
 
   const photo: Photo = {
     id: '1',
@@ -23,6 +25,7 @@ describe('FavoritesComponent', () => {
 
   beforeEach(async () => {
     favorites = signal<Photo[]>([]);
+    navigate = jasmine.createSpy('navigate').and.returnValue(Promise.resolve(true));
 
     await TestBed.configureTestingModule({
       imports: [FavoritesComponent],
@@ -31,6 +34,7 @@ describe('FavoritesComponent', () => {
           provide: FavoritesStore,
           useValue: { favorites },
         },
+        { provide: Router, useValue: { navigate } },
       ],
     }).compileComponents();
 
@@ -51,5 +55,11 @@ describe('FavoritesComponent', () => {
     fixture.detectChanges();
 
     expect(component.favorites()).toEqual([newer, older]);
+  });
+
+  it('navigates to photo detail on click', () => {
+    component.onPhotoClick(photo);
+
+    expect(navigate).toHaveBeenCalledWith(['/photos', '1']);
   });
 });

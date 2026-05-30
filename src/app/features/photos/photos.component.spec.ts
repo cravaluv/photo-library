@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
-import { PhotosComponent, SNACKBAR_DURATION_MS } from './photos.component';
+import { PhotosComponent } from './photos.component';
+import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
