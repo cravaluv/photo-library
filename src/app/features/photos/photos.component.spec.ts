@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
-import { PhotosComponent } from './photos.component';
 import { SNACKBAR_DURATION_MS } from '../../core/constants/ui.constants';
 import { Photo } from '../../core/models/photo.types';
 import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
+import { PhotosComponent } from './photos.component';
 
 describe('PhotosComponent', () => {
   let component: PhotosComponent;
@@ -56,6 +56,58 @@ describe('PhotosComponent', () => {
     expect(fetchPage).toHaveBeenCalledWith(1);
     expect(component.photos()).toEqual(photos);
     expect(component.loading()).toBeFalse();
+  });
+
+  it('does not fetch when already loading', () => {
+    component.ngOnInit();
+    fetchPage.calls.reset();
+
+    component.loading.set(true);
+    component.loadMore();
+
+    expect(fetchPage).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch when there is no more data', () => {
+    component.ngOnInit();
+    fetchPage.calls.reset();
+
+    component.hasMore.set(false);
+    component.loadMore();
+
+    expect(fetchPage).not.toHaveBeenCalled();
+  });
+
+  it('appends next page on loadMore', () => {
+    const nextBatch: Photo[] = [
+      {
+        id: '2',
+        author: 'B',
+        width: 100,
+        height: 100,
+        thumbnailUrl: 'https://picsum.photos/id/2/200/300',
+        detailUrl: 'https://picsum.photos/id/2/800/1200',
+        addedAt: 0,
+      },
+    ];
+
+    fetchPage.and.returnValues(of(photos), of(nextBatch));
+
+    component.ngOnInit();
+    component.loadMore();
+
+    expect(fetchPage).toHaveBeenCalledWith(2);
+    expect(component.photos()).toEqual([...photos, ...nextBatch]);
+  });
+
+  it('stops loading when API returns empty page', () => {
+    fetchPage.and.returnValues(of(photos), of([]));
+
+    component.ngOnInit();
+    component.loadMore();
+
+    expect(component.hasMore()).toBeFalse();
+    expect(component.photos()).toEqual(photos);
   });
 
   it('adds photo to favorites on click', () => {

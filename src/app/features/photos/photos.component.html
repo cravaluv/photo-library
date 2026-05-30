@@ -1,7 +1,15 @@
-@if (loading()) {
-  <div class="photos__loader" role="status" aria-label="Loading photos">
-    <mat-spinner [diameter]="40" />
-  </div>
+@if (showInitialLoader()) {
+  <app-loading-indicator label="Loading photos" />
 } @else {
   <app-photo-grid [photos]="photos()" (photoClick)="onPhotoClick($event)" />
+
+  @if (showBottomLoader()) {
+    <app-loading-indicator label="Loading more photos" [diameter]="32" />
+  }
+
+  <div
+    appInfiniteScroll
+    [disabled]="loading() || !hasMore()"
+    (scrolledToEnd)="loadMore()"
+  ></div>
 }
