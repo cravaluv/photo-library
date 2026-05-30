@@ -1,27 +1,35 @@
-# GalleryTemplate
+# Photo Gallery
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.8.
+Small Angular app — random photos from Picsum, favorites saved in localStorage.
 
-## Development server
+## Run locally
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+npm ci
+npm start
+```
 
-## Code scaffolding
+Open http://localhost:4200
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Tests and build:
 
-## Build
+```bash
+npm test
+npm run build
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Routes
 
-## Running unit tests
+- **`/`** — photo feed with infinite scroll (custom `IntersectionObserver` directive), click to add to favorites
+- **`/favorites`** — saved photos (persist after refresh), click to open detail
+- **`/photos/:id`** — single photo + remove from favorites
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Photos come from `picsum.photos`. Fetching is delayed by ~200–300 ms to mimic a slow API. Favorites are stored as full `Photo` objects in localStorage, not just ids.
 
-## Running end-to-end tests
+## Project layout
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- `core` — API, mapper, favorites store
+- `shared` — grid, cards, infinite scroll, loader
+- `features` — lazy-loaded pages
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Angular 21, Angular Material, SCSS.

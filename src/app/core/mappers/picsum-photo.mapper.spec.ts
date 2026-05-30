@@ -28,7 +28,7 @@ describe('picsum-photo.mapper', () => {
       expect(photo.width).toBe(4000);
       expect(photo.height).toBe(3000);
       expect(photo.thumbnailUrl).toBe('https://picsum.photos/id/42/200/300');
-      expect(photo.detailUrl).toBe('https://picsum.photos/id/42/800/1200');
+      expect(photo.detailUrl).toBe('https://picsum.photos/id/42/400/600');
       expect(photo.addedAt).toBe(0);
     });
   });

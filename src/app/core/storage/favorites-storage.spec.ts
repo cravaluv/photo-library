@@ -13,7 +13,7 @@ describe('FavoritesStorage', () => {
     width: 100,
     height: 100,
     thumbnailUrl: 'https://picsum.photos/id/1/200/300',
-    detailUrl: 'https://picsum.photos/id/1/800/1200',
+    detailUrl: 'https://picsum.photos/id/1/400/600',
     addedAt: 1000,
   };
 
