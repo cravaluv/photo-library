@@ -3,5 +3,5 @@
     <mat-spinner [diameter]="40" />
   </div>
 } @else {
-  <app-photo-grid [photos]="photos()" />
+  <app-photo-grid [photos]="photos()" (photoClick)="onPhotoClick($event)" />
 }

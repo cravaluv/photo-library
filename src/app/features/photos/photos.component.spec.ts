@@ -1,15 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
+import { PhotosComponent, SNACKBAR_DURATION_MS } from './photos.component';
 import { Photo } from '../../core/models/photo.types';
+import { FavoritesStore } from '../../core/services/favorites-store.service';
 import { PhotoApiService } from '../../core/services/photo-api.service';
-
-import { PhotosComponent } from './photos.component';
 
 describe('PhotosComponent', () => {
   let component: PhotosComponent;
   let fixture: ComponentFixture<PhotosComponent>;
   let fetchPage: jasmine.Spy;
+  let favoritesAdd: jasmine.Spy;
+  let favoritesGetById: jasmine.Spy;
+  let snackBarOpen: jasmine.Spy;
 
   const photos: Photo[] = [
     {
@@ -25,10 +29,20 @@ describe('PhotosComponent', () => {
 
   beforeEach(async () => {
     fetchPage = jasmine.createSpy('fetchPage').and.returnValue(of(photos));
+    favoritesAdd = jasmine.createSpy('add');
+    favoritesGetById = jasmine.createSpy('getById').and.returnValue(undefined);
+    snackBarOpen = jasmine.createSpy('open');
 
     await TestBed.configureTestingModule({
       imports: [PhotosComponent],
-      providers: [{ provide: PhotoApiService, useValue: { fetchPage } }],
+      providers: [
+        { provide: PhotoApiService, useValue: { fetchPage } },
+        {
+          provide: FavoritesStore,
+          useValue: { add: favoritesAdd, getById: favoritesGetById },
+        },
+        { provide: MatSnackBar, useValue: { open: snackBarOpen } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PhotosComponent);
@@ -41,5 +55,25 @@ describe('PhotosComponent', () => {
     expect(fetchPage).toHaveBeenCalledWith(1);
     expect(component.photos()).toEqual(photos);
     expect(component.loading()).toBeFalse();
+  });
+
+  it('adds photo to favorites on click', () => {
+    component.onPhotoClick(photos[0]);
+
+    expect(favoritesAdd).toHaveBeenCalledWith(photos[0]);
+    expect(snackBarOpen).toHaveBeenCalledWith('Photo added to favorites', undefined, {
+      duration: SNACKBAR_DURATION_MS,
+    });
+  });
+
+  it('shows snackbar when photo is already in favorites', () => {
+    favoritesGetById.and.returnValue(photos[0]);
+
+    component.onPhotoClick(photos[0]);
+
+    expect(favoritesAdd).not.toHaveBeenCalled();
+    expect(snackBarOpen).toHaveBeenCalledWith('Photo already in favorites', undefined, {
+      duration: SNACKBAR_DURATION_MS,
+    });
   });
 });
