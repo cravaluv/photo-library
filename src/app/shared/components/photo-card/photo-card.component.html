@@ -1,0 +1,9 @@
+<div class="photo-card" (click)="onClick()">
+  <img
+    class="photo-card__image"
+    [ngSrc]="photo().thumbnailUrl"
+    [width]="thumbWidth"
+    [height]="thumbHeight"
+    [alt]="'Photo by ' + photo().author"
+  />
+</div>

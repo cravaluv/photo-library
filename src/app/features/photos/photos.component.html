@@ -1,1 +1,7 @@
-<p>photos works!</p>
+@if (loading()) {
+  <div class="photos__loader" role="status" aria-label="Loading photos">
+    <mat-spinner [diameter]="40" />
+  </div>
+} @else {
+  <app-photo-grid [photos]="photos()" />
+}

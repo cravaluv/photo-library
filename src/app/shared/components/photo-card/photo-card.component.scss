@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  width: 200px;
+}
+
+.photo-card {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.photo-card__image {
+  border-radius: 0.75rem;
+  display: block;
+  height: auto;
+  width: 100%;
+}
